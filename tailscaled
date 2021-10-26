@@ -32,7 +32,7 @@ case "$1" in
         if start-stop-daemon --start --quiet --oknodo --chuid 0:0 --pidfile /run/tailscaled.pid --background \
                 --exec /usr/sbin/tailscaled -- --state=/var/lib/tailscale/tailscaled.state \
                 --socket=/run/tailscale/tailscaled.sock --port 41641; then
-            tailscale up --hostname=codespace --authkey=${TAILSCALE_AUTHKEY} --netfilter-mode=off
+            tailscale up --authkey=${TAILSCALE_AUTHKEY} --netfilter-mode=off
             log_end_msg 0 || true
         else
             log_end_msg 1 || true
