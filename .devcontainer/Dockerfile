@@ -17,6 +17,7 @@ USER root
 
 RUN apt-get update && apt-get install -y curl gpg dnsutils
 COPY tailscaled /etc/init.d/tailscaled
+RUN chmod +x /etc/init.d/tailscaled
 COPY --from=builder /app/binaries/tailscaled /usr/sbin/tailscaled
 COPY --from=builder /app/binaries/tailscale /usr/bin/tailscale
 
