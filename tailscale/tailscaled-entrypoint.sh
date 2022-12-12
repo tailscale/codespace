@@ -8,13 +8,13 @@ set -euxo pipefail
 if [[ "$(id -u)" -eq 0 ]]; then
   mkdir -p /workspaces/.tailscale || true
   /usr/local/sbin/tailscaled \
-    --state=/workspaces/.tailscale/tailscaled.state \
+    --statedir=/workspaces/.tailscale/ \
     --socket=/var/run/tailscale/tailscaled.sock \
     --port=41641 \
     >& /dev/null &
 elif command -v sudo >& /dev/null; then
   sudo --non-interactive sh -c 'mkdir -p /workspaces/.tailscale ; /usr/local/sbin/tailscaled \
-    --state=/workspaces/.tailscale/tailscaled.state \
+    --statedir=/workspaces/.tailscale/ \
     --socket=/var/run/tailscale/tailscaled.sock \
     --port=41641 >& /dev/null' &
 else
