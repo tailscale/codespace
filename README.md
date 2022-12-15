@@ -20,7 +20,7 @@ to your `devcontainer.json`:
 Then launch your Codespace. After it starts up, run [`tailscale up`](https://tailscale.com/kb/1080/cli/#up):
 
 ```shell
-sudo tailscale up --netfilter-mode=off
+sudo tailscale up --accept-routes
 ```
 
 You'll only need to run `tailscale up` once per Codespace.
