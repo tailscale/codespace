@@ -1,14 +1,27 @@
-# Codespace with Tailscale connectivity
-This repository contains a simple [codespace devcontainer](https://github.com/features/codespaces)
-which can connect the running VM to a [Tailscale network](https://tailscale.com). To use it
-you need to be a member of a GitHub Organization which has Codespaces enabled. When you
-click on the Code button you should see a second tab with an option to start up
-a new codespace.
+# Codespace feature for Tailscale connectivity
+
+This repository contains a feature for [GitHub Codespaces](https://github.com/features/codespaces)
+to connect the running VM to a [Tailscale network](https://tailscale.com).
 
 ![Start a new codespace](codespace.jpg)
 
-You need to create a [Reusable Authkey](https://login.tailscale.com/admin/settings/authkeys)
-for your Tailnet and add it as a [Codespaces Secret](https://github.com/settings/codespaces)
-named `TAILSCALE_AUTHKEY`.
+To get started, add the following [feature](https://docs.github.com/en/codespaces/setting-up-your-project-for-codespaces/adding-features-to-a-devcontainer-file)
+to your `devcontainer.json`:
 
-Then launch your codespace!
+```json
+"runArgs": ["--device=/dev/net/tun"],
+"features": {
+  // ...
+  "ghcr.io/tailscale/codespace/tailscale": {}
+  // ...
+}
+```
+
+Then launch your Codespace. After it starts up, run [`tailscale up`](https://tailscale.com/kb/1080/cli/#up):
+
+```shell
+sudo tailscale up --accept-routes
+```
+
+You'll only need to run `tailscale up` once per Codespace.
+The Tailscale state will be saved between rebuilds.
