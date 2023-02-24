@@ -1,23 +1,28 @@
-# Codespace feature for Tailscale connectivity
+# Dev Container Feature for Tailscale connectivity
 
-This repository contains a feature for [GitHub Codespaces](https://github.com/features/codespaces)
+This repository contains a feature for [Development Containers](https://containers.dev) (such as [GitHub Codespaces](https://github.com/features/codespaces))
 to connect the running VM to a [Tailscale network](https://tailscale.com).
 
-![Start a new codespace](codespace.jpg)
+## Usage
 
 To get started, add the following [feature](https://docs.github.com/en/codespaces/setting-up-your-project-for-codespaces/adding-features-to-a-devcontainer-file)
 to your `devcontainer.json`:
 
-```json
-"runArgs": ["--device=/dev/net/tun"],
-"features": {
+```jsonc
+{
   // ...
-  "ghcr.io/tailscale/codespace/tailscale": {}
-  // ...
+  "runArgs": ["--device=/dev/net/tun"],
+  "features": {
+    "ghcr.io/tailscale/codespace/tailscale": {}
+  }
 }
 ```
 
-Then launch your Codespace. After it starts up, run [`tailscale up`](https://tailscale.com/kb/1080/cli/#up):
+Then launch your Dev Container.
+
+![Start a new codespace](codespace.jpg)
+
+After it starts up, run [`tailscale up`](https://tailscale.com/kb/1080/cli/#up):
 
 ```shell
 sudo tailscale up --accept-routes
