@@ -10,7 +10,7 @@
   "options": {
     "version": {
       "type": "string",
-      "default": "1.36.1",
+      "default": "1.36.2",
       "description": "Version of Tailscale to download"
     }
   }
