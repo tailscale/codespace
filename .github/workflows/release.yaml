@@ -13,6 +13,7 @@ jobs:
           publish-features: "true"
           base-path-to-features: "./src"
           features-namespace: "tailscale/codespace"
+          templates-namespace: "tailscale/codespace"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 permissions:
