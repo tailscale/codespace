@@ -5,18 +5,24 @@
 
 set -euxo pipefail
 
+if [[ "$EPHEMERAL" == "true" ]]; then
+  TAILSCALE_STATE="--state=mem:"
+else
+  TAILSCALE_STATE="--statedir=/workspaces/.tailscale/"
+fi
+
 if [[ "$(id -u)" -eq 0 ]]; then
   mkdir -p /workspaces/.tailscale || true
   /usr/local/sbin/tailscaled \
-    --state=mem: \
+    $TAILSCALE_STATE \
     --socket=/var/run/tailscale/tailscaled.sock \
     --port=41641 \
     >& /dev/null &
 elif command -v sudo >& /dev/null; then
-  sudo --non-interactive sh -c 'mkdir -p /workspaces/.tailscale ; /usr/local/sbin/tailscaled \
-    --state=mem: \
+  sudo --non-interactive sh -c "mkdir -p /workspaces/.tailscale ; /usr/local/sbin/tailscaled \
+    $TAILSCALE_STATE \
     --socket=/var/run/tailscale/tailscaled.sock \
-    --port=41641 >& /dev/null' &
+    --port=41641 >& /dev/null" &
 else
   echo "tailscaled could not start as root." 1>&2
 fi

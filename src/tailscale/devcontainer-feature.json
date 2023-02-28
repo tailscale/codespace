@@ -12,6 +12,11 @@
       "type": "string",
       "default": "1.34.1",
       "description": "Version of Tailscale to download"
+    },
+    "ephemeral": {
+      "type": "boolean",
+      "default": false,
+      "description": "Register the container as an Tailscale ephemeral node"
     }
   }
 }
