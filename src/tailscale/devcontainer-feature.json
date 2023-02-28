@@ -16,7 +16,7 @@
     "ephemeral": {
       "type": "boolean",
       "default": false,
-      "description": "Register the container as an Tailscale ephemeral node"
+      "description": "Register the container as a Tailscale ephemeral node"
     }
   }
 }
