@@ -8,12 +8,12 @@ set -euo pipefail
 tailscale_url="https://pkgs.tailscale.com/stable/tailscale_${VERSION}_amd64.tgz"
 
 download() {
-  if command -v curl >& /dev/null; then
+  if command -v curl &> /dev/null; then
     curl -fsSL "$1"
-  elif command -v wget >& /dev/null; then
+  elif command -v wget &> /dev/null; then
     wget -qO - "$1"
   else
-    echo "Must install curl or wget to download $1" 1>&2
+    echo "Must install curl or wget to download $1" 1&>2
     return 1
   fi
 }

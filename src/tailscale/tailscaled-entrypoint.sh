@@ -11,14 +11,14 @@ if [[ "$(id -u)" -eq 0 ]]; then
     --statedir=/workspaces/.tailscale/ \
     --socket=/var/run/tailscale/tailscaled.sock \
     --port=41641 \
-    >& /dev/null &
-elif command -v sudo >& /dev/null; then
+    &> /dev/null &
+elif command -v sudo &> /dev/null; then
   sudo --non-interactive sh -c 'mkdir -p /workspaces/.tailscale ; /usr/local/sbin/tailscaled \
     --statedir=/workspaces/.tailscale/ \
     --socket=/var/run/tailscale/tailscaled.sock \
-    --port=41641 >& /dev/null' &
+    --port=41641 &> /dev/null' &
 else
-  echo "tailscaled could not start as root." 1>&2
+  echo "tailscaled could not start as root." 1&>2
 fi
 
 exec "$@"
