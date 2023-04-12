@@ -1,0 +1,7 @@
+{
+  "image": "mcr.microsoft.com/devcontainers/universal:2",
+  "runArgs": ["--device=/dev/net/tun"],
+  "features": {
+    "ghcr.io/tailscale/codespace": {}
+  }
+}
