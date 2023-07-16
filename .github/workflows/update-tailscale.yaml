@@ -5,7 +5,8 @@ on:
   workflow_dispatch:
 
 jobs:
-  check-version:
+  update-version:
+    name: Check & Tailscale Version
     runs-on: ubuntu-latest
     permissions:
       contents: write  # Need to commit the changed file on a branch
