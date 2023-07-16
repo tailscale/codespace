@@ -1,0 +1,77 @@
+on:
+  schedule:
+    # Run daily at 5:00 UTC
+    - cron: "0 5 * * *"
+  workflow_dispatch:
+
+jobs:
+  check-version:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write  # Need to commit the changed file on a branch
+      pull-requests: write  # Need to create a new PR
+
+    outputs:
+      version: ${{ steps.release.outputs.version }}
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          # Need to checkout full git history in order to make a new commit
+          fetch-depth: 0
+
+      - name: Get tailscale latest release
+        id: release
+        uses: actions/github-script@v6
+        with:
+          # https://octokit.github.io/rest.js/v19#repos-get-latest-release
+          script: |
+            const release_data = await github.rest.repos.getLatestRelease({
+              owner: 'tailscale',
+              repo: 'tailscale',
+            });
+
+            const version = release_data.data.name;
+            core.setOutput('version', parseFloat(version));
+
+      - name: Get current version
+        id: current
+        run: |
+          current_version="$(cat src/tailscale/devcontainer-feature.json | jq '.options.version.default')"
+
+          echo "version=${current_version}" >> "${GITHUB_OUTPUT}"
+
+      - name: Update Tailscale feature version
+        # Only run if a newer version of Tailscale exists
+        if: steps.release.outputs.version > steps.current.outputs.version
+        # It is much easier to commit to a branch with bash than with actions/github-script
+        run: |
+          set -e
+          tmp=$(mktemp)
+
+          jq '.options.version.default = "${{ steps.release.outputs.version }}"' src/tailscale/devcontainer-feature.json > "$tmp" && mv $tmp src/tailscale/devcontainer-feature.json
+
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+
+          git checkout -b "BOT/autobump-version"
+
+          git add src/tailscale/devcontainer-feature.json
+          git commit -m "chore: update tailscale version"
+
+          git push -u origin "BOT/autobump-version"
+      
+      - name: Create pull request
+        if: steps.release.outputs.version > steps.current.outputs.version
+        uses: actions/github-script@v6
+        with:
+          # But much easier to make a pull request with github-script
+          # https://octokit.github.io/rest.js/v19#pulls-create
+          script: |
+            github.rest.pulls.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              head: "BOT/autobump-version",
+              base: "main",
+              title: "chore: update tailscale version",
+            });
