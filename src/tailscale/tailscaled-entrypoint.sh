@@ -11,12 +11,12 @@ if [[ "$(id -u)" -eq 0 ]]; then
     --statedir=/workspaces/.tailscale/ \
     --socket=/var/run/tailscale/tailscaled.sock \
     --port=41641 \
-    >& /dev/null &
+    >/dev/null 2>&1 &
 elif command -v sudo >& /dev/null; then
   sudo --non-interactive sh -c 'mkdir -p /workspaces/.tailscale ; /usr/local/sbin/tailscaled \
     --statedir=/workspaces/.tailscale/ \
     --socket=/var/run/tailscale/tailscaled.sock \
-    --port=41641 >& /dev/null' &
+    --port=41641 >/dev/null 2>&1' &
 else
   echo "tailscaled could not start as root." 1>&2
 fi
