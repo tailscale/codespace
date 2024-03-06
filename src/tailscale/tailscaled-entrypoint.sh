@@ -5,6 +5,11 @@
 
 set -euxo pipefail
 
+# Note: It is not recommended that users copy this setting into other
+# environments, the feature is in test and will be formally released in the
+# future, debug flags may later be recycled for other purposes leading to
+# unexpected behavior.
+export TS_DEBUG_FIREWALL_MODE=auto
 if [[ "$(id -u)" -eq 0 ]]; then
   mkdir -p /workspaces/.tailscale || true
   /usr/local/sbin/tailscaled \
@@ -20,5 +25,6 @@ elif command -v sudo &> /dev/null; then
 else
   echo "tailscaled could not start as root." 1&>2
 fi
+unset TS_DEBUG_FIREWALL_MODE
 
 exec "$@"
