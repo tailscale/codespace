@@ -12,18 +12,21 @@ set -euxo pipefail
 export TS_DEBUG_FIREWALL_MODE=auto
 if [[ "$(id -u)" -eq 0 ]]; then
   mkdir -p /workspaces/.tailscale || true
-  /usr/local/sbin/tailscaled \
+  2>/dev/null >/dev/null \
+    /usr/local/sbin/tailscaled \
     --statedir=/workspaces/.tailscale/ \
     --socket=/var/run/tailscale/tailscaled.sock \
-    --port=41641 \
-    &> /dev/null &
-elif command -v sudo &> /dev/null; then
-  sudo --non-interactive sh -c 'mkdir -p /workspaces/.tailscale ; /usr/local/sbin/tailscaled \
+    --port=41641 &
+elif command -v sudo > /dev/null; then
+  sudo --non-interactive mkdir -p /workspaces/.tailscale
+  2>/dev/null >/dev/null \
+    sudo --non-interactive \
+    /usr/local/sbin/tailscaled \
     --statedir=/workspaces/.tailscale/ \
     --socket=/var/run/tailscale/tailscaled.sock \
-    --port=41641 &> /dev/null' &
+    --port=41641 &
 else
-  echo "tailscaled could not start as root." 1&>2
+  >&2 echo "tailscaled could not start as root."
 fi
 unset TS_DEBUG_FIREWALL_MODE
 
