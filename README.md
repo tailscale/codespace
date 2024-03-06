@@ -11,9 +11,7 @@ to your `devcontainer.json`:
 ```json
 "runArgs": ["--device=/dev/net/tun"],
 "features": {
-  // ...
-  "ghcr.io/tailscale/codespace": {}
-  // ...
+  "ghcr.io/tailscale/codespace/tailscale": {}
 }
 ```
 
