@@ -20,7 +20,7 @@ if [[ "$(id -u)" -eq 0 ]]; then
 elif command -v sudo > /dev/null; then
   sudo --non-interactive mkdir -p /workspaces/.tailscale
   2>/dev/null >/dev/null \
-    sudo --non-interactive \
+    sudo --non-interactive "TS_DEBUG_FIREWALL_MODE=$TS_DEBUG_FIREWALL_MODE" \
     /usr/local/sbin/tailscaled \
     --statedir=/workspaces/.tailscale/ \
     --socket=/var/run/tailscale/tailscaled.sock \
