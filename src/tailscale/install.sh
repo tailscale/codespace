@@ -8,7 +8,7 @@ set -euo pipefail
 platform=$(uname -m)
 if [ "$platform" = "x86_64" ]; then
     tailscale_url="https://pkgs.tailscale.com/stable/tailscale_1.66.3_amd64.tgz"
-elif [ "$platform" = "aarch64" ]; then
+elif [ "$platform" = "aarch64" ] || [ "$platform" = "arm64" ]; then
     tailscale_url="https://pkgs.tailscale.com/stable/tailscale_1.66.3_arm64.tgz"
 else
     echo "Unsupported platform: $platform"
