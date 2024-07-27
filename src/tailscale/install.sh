@@ -22,6 +22,7 @@ script_dir="$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 scratch_dir="/tmp/tailscale"
 mkdir -p "$scratch_dir"
 trap 'rm -rf "$scratch_dir"' EXIT
+mkdir -p /usr/local/sbin
 
 download "$tailscale_url" |
   tar -xzf - --strip-components=1 -C "$scratch_dir"
