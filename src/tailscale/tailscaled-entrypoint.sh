@@ -30,13 +30,7 @@ if [[ "$(id -u)" -eq 0 ]]; then
     mknod /dev/net/tun c 10 200
   fi
   check_userspace
-  mkdir -p /workspaces/.tailscale /var/log
-  touch $TAILSCALED_LOG
-  >$TAILSCALED_LOG 2>&1 \
-    /usr/local/sbin/tailscaled \
-    --statedir=/workspaces/.tailscale/ \
-    --socket=$TAILSCALED_SOCK \
-    --port=41641 &
+  >$TAILSCALED_LOG 2>&1 /usr/local/sbin/tailscaled &
   TAILSCALED_PID=$!
 elif command -v sudo > /dev/null; then
   if [[ ! -c /dev/net/tun ]]; then
@@ -44,14 +38,9 @@ elif command -v sudo > /dev/null; then
     sudo --non-interactive mknod /dev/net/tun c 10 200
   fi
   check_userspace
-  sudo --non-interactive mkdir -p /workspaces/.tailscale /var/log
-  sudo --non-interactive touch $TAILSCALED_LOG
   >$TAILSCALED_LOG 2>&1 \
     sudo --non-interactive "TS_DEBUG_FIREWALL_MODE=$TS_DEBUG_FIREWALL_MODE" \
-    /usr/local/sbin/tailscaled \
-    --statedir=/workspaces/.tailscale/ \
-    --socket=$TAILSCALED_SOCK \
-    --port=41641 &
+    /usr/local/sbin/tailscaled &
   TAILSCALED_PID=$!
 else
   >&2 echo "tailscaled could not start as root."
