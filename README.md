@@ -24,3 +24,16 @@ sudo tailscale up --accept-routes
 
 You'll only need to run `tailscale up` once per Codespace.
 The Tailscale state will be saved between rebuilds.
+
+## Development
+
+A convenient way to develop this feature is to use codespaces, as they start by
+default with many of the dependencies required (at least Docker and npx).
+
+Inside a codespace you can use the `Tasks:Run Test Task` command.
+
+On a standalone machine tests can be run with:
+
+```shell
+npx @devcontainers/cli features test
+```
