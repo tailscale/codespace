@@ -3,7 +3,7 @@
 # Use of this source code is governed by a BSD-style
 # license that can be found in the LICENSE file.
 
-set -euo pipefail
+set -xeuo pipefail
 
 platform=$(uname -m)
 if [ "$platform" = "x86_64" ]; then
@@ -15,14 +15,41 @@ else
     exit 1
 fi
 
+CURL_INSTALL_ATTEMPTED=""
+install_curl() {
+  CURL_INSTALL_ATTEMPTED=1
+
+  if type apt-get > /dev/null 2>/dev/null; then
+    apt-get update
+    # install recommends left on so we get ca-certificates.
+    apt-get -y install curl
+  elif type microdnf > /dev/null 2>/dev/null; then
+    microdnf makecache
+    microdnf -y install --refresh --best --nodocs --noplugins --setopt=install_weak_deps=0 curl
+  elif type dnf > /dev/null 2>/dev/null; then
+    dnf check-update
+    dnf -y install --refresh --best --nodocs --noplugins --setopt=install_weak_deps=0 curl
+  elif type yum > /dev/null 2>/dev/null; then
+    yum -y install --noplugins --setopt=install_weak_deps=0 curl
+  else
+    2> echo "Unknown platform, can not automate curl install. curl is required to download tailscale"
+    return 1
+  fi
+}
+
 download() {
   if command -v curl &> /dev/null; then
-    curl -fsSL "$1"
+    curl -fsSL "$@"
   elif command -v wget &> /dev/null; then
-    wget -qO - "$1"
+    wget -qO - "$@"
   else
-    echo "Must install curl or wget to download $1" 1&>2
-    return 1
+    if [[ -z "$CURL_INSTALL_ATTEMPTED" ]]; then
+      install_curl >&2
+      download "$@"
+    else
+      echo "Must install curl or wget to download $1" >&2
+      return 1
+    fi
   fi
 }
 

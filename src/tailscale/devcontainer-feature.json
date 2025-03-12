@@ -6,7 +6,7 @@
   "documentationURL": "https://tailscale.com/kb/1160/github-codespaces/",
   "licenseURL": "https://github.com/tailscale/codespace/blob/main/LICENSE",
   "entrypoint": "/usr/local/sbin/tailscaled-entrypoint",
-  "capAdd": ["NET_ADMIN", "NET_RAW"],
+  "capAdd": ["NET_ADMIN", "NET_RAW", "MKNOD"],
   "options": {
     "version": {
       "type": "string",
