@@ -1,0 +1,22 @@
+name: Test Devcontainer Feature
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  test-feature:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Dev Container CLI
+        run: |
+          npm install -g @devcontainers/cli
+
+      - name: Run tests
+        run: |
+          npx @devcontainers/cli features test

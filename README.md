@@ -9,7 +9,6 @@ To get started, add the following [feature](https://docs.github.com/en/codespace
 to your `devcontainer.json`:
 
 ```json
-"runArgs": ["--device=/dev/net/tun"],
 "features": {
   "ghcr.io/tailscale/codespace/tailscale": {
     "version": "latest"
