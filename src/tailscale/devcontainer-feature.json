@@ -13,5 +13,12 @@
       "default": "latest",
       "description": "Version of Tailscale to download"
     }
-  }
+  },
+  "mounts": [
+    {
+      "source": "tailscale-${devcontainerId}",
+      "target": "/var/lib/tailscale",
+      "type": "volume"
+    }
+  ]
 }

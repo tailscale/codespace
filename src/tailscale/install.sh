@@ -64,7 +64,8 @@ install -D "$scratch_dir/tailscale" /usr/local/bin/tailscale
 install -D "$scratch_dir/tailscaled" /usr/local/sbin/tailscaled
 install -D "$script_dir/tailscaled-entrypoint.sh" /usr/local/sbin/tailscaled-entrypoint
 
-mkdir -p /var/lib/tailscale /var/run/tailscale
+mkdir -p /var/lib/tailscale /var/run/tailscale /var/log
+touch /var/log/tailscaled.log
 
 if ! command -v iptables >& /dev/null; then
   if command -v apt-get >& /dev/null; then

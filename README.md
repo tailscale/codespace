@@ -25,6 +25,17 @@ sudo tailscale up --accept-routes
 You'll only need to run `tailscale up` once per Codespace.
 The Tailscale state will be saved between rebuilds.
 
+## Details
+
+- A mount is added called `tailscale-${devcontainerId}` mapped to
+  `/var/lib/tailscale` to persist taislcaled state across devcontainer rebuilds,
+  so a single devcontainer will remain logged in for the devcontainer lifetime.
+- The feature requires `CAP_NET_ADMIN` in order to configure certain network
+  properties for kernel mode tailscale.
+- The feature requires kernel tun support in the runtime and `CAP_MKNOD` so that
+  it can create a tun device node if needed.
+- `CAP_NET_RAW` enables the feature to send ICMP.
+
 ## Development
 
 A convenient way to develop this feature is to use codespaces, as they start by
