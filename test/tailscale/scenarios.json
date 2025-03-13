@@ -18,5 +18,14 @@
                 "version": "1.80.2"
             }
         }
+    },
+    "tailscale_auth_key": {
+        "image": "ubuntu:latest",
+        "containerEnv": {
+            "TS_AUTH_KEY": "test-auth-key"
+        },
+        "features": {
+            "tailscale": {}
+        }
     }
 }

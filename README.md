@@ -16,14 +16,29 @@ to your `devcontainer.json`:
 }
 ```
 
-Then launch your Codespace. After it starts up, run [`tailscale up`](https://tailscale.com/kb/1080/cli/#up):
+## Starting Tailscale
+
+The Tailscale daemon starts automatically as part of the devcontainer entrypoint.
+
+### Manual Log in
 
 ```shell
 sudo tailscale up --accept-routes
 ```
 
-You'll only need to run `tailscale up` once per Codespace.
-The Tailscale state will be saved between rebuilds.
+More info: [`tailscale up`](https://tailscale.com/kb/1080/cli/#up)
+
+### Automatic login
+
+Create an [auth key](https://tailscale.com/kb/1085/auth-keys) in the Tailscale
+[admin panel](https://login.tailscale.com/admin/settings/keys).
+
+Create a codespace secret called `TS_AUTH_KEY` in your
+[codespaces configuration](https://github.com/settings/codespaces) containing
+the auth key you made above.
+
+Now whenever you launch a devcontainer with access to this secret, it will
+automatically perform a `tailscale up --accept-routes --auth-key=$TS_AUTH_KEY`.
 
 ## Details
 
