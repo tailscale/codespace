@@ -5,4 +5,12 @@
 
 set -e
 
-tailscale version --daemon
+source dev-container-features-test-lib
+
+if [[ "$VERSION" == latest ]]; then
+    check "Daemon: " tailscale version --daemon
+else
+    check "$VERSION" tailscale version --daemon
+fi
+
+reportResults

@@ -1,0 +1,22 @@
+{
+    "tailscale_on_ubuntu": {
+        "image": "ubuntu:latest",
+        "features": {
+            "tailscale": {}
+        }
+    },
+    "tailscale_on_alma": {
+        "image": "almalinux:latest",
+        "features": {
+            "tailscale": {}
+        }
+    },
+    "tailscale_version": {
+        "image": "ubuntu:latest",
+        "features": {
+            "tailscale": {
+                "version": "1.80.2"
+            }
+        }
+    }
+}
