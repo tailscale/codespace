@@ -33,6 +33,8 @@ install_curl() {
     dnf -y install --refresh --best --nodocs --noplugins --setopt=install_weak_deps=0 curl
   elif type yum > /dev/null 2>/dev/null; then
     yum -y install --noplugins --setopt=install_weak_deps=0 curl
+  elif type apk > /dev/null 2>/dev/null; then
+    apk add curl
   else
     2> echo "Unknown platform, can not automate curl install. curl is required to download tailscale"
     return 1
