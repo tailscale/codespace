@@ -5,6 +5,8 @@
 
 set -xeuo pipefail
 
+export DEBIAN_FRONTEND=noninteractive
+
 platform=$(uname -m)
 if [ "$platform" = "x86_64" ]; then
     tailscale_url="https://pkgs.tailscale.com/stable/tailscale_${VERSION}_amd64.tgz"
@@ -56,13 +58,13 @@ download() {
 script_dir="$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 scratch_dir="/tmp/tailscale"
 mkdir -p "$scratch_dir"
-trap 'rm -rf "$scratch_dir"' EXIT
+trap 'rm -rf "$scratch_dir" /var/lib/apt/lists/*' EXIT
 
-download "$tailscale_url" |
-  tar -xzf - --strip-components=1 -C "$scratch_dir"
-install -D "$scratch_dir/tailscale" /usr/local/bin/tailscale
-install -D "$scratch_dir/tailscaled" /usr/local/sbin/tailscaled
-install -D "$script_dir/tailscaled-entrypoint.sh" /usr/local/sbin/tailscaled-entrypoint
+download "$tailscale_url" | tar -xzf - --strip-components=1 -C "$scratch_dir"
+install -D -m 755 "$scratch_dir/tailscale" /usr/local/bin/tailscale
+install -D -m 755 "$scratch_dir/tailscaled" /usr/local/sbin/tailscaled
+install -D -m 755 "$script_dir/tailscaled-entrypoint.sh" /usr/local/sbin/tailscaled-entrypoint
+install -D -m 755 "$script_dir/tailscaled-devcontainer-start.sh" /usr/local/sbin/tailscaled-devcontainer-start
 
 mkdir -p /var/lib/tailscale /var/run/tailscale /var/log
 touch /var/log/tailscaled.log
@@ -70,9 +72,8 @@ touch /var/log/tailscaled.log
 if ! command -v iptables >& /dev/null; then
   if command -v apt-get >& /dev/null; then
     apt-get update
-    DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends iptables
-    rm -rf /var/lib/apt/lists/*
+    apt-get install -y --no-install-recommends iptables
   else
-    echo "WARNING: iptables not installed. tailscaled might fail."
+    >&2 echo "WARNING: iptables not installed. tailscaled might fail."
   fi
 fi
