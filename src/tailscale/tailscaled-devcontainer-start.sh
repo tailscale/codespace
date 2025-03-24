@@ -72,6 +72,6 @@ if [[ -n "$auth_key" ]]; then
     if [[ -n "${CODESPACE_NAME}" ]]; then
       hostnamearg="--hostname=${CODESPACE_NAME}"
     fi
-    /usr/local/sbin/tailscale up --accept-routes --authkey="$auth_key" $hostnamearg
+    /usr/local/bin/tailscale up --accept-routes --authkey="$auth_key" $hostnamearg
   fi
 fi
