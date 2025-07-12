@@ -13,4 +13,7 @@ if [[ -n "$VERSION" ]]; then
     check "version is correct" bash -c "tailscale version --daemon | grep -q $VERSION"
 fi
 
+# Verify auth setup script is installed
+check "auth setup script exists" ls /usr/local/sbin/tailscaled-auth-setup
+
 reportResults

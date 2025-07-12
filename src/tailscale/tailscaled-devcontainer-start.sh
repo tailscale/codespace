@@ -63,15 +63,3 @@ if [[ -n "$TAILSCALED_PID" ]]; then
     fi
   done
 fi
-
-if [[ -n "$auth_key" ]]; then
-  if [[ "$auth_key" == "test-auth-key" ]]; then
-    touch /tmp/test-auth-key-seen
-  else
-    hostnamearg=""
-    if [[ -n "${CODESPACE_NAME}" ]]; then
-      hostnamearg="--hostname=${CODESPACE_NAME}"
-    fi
-    /usr/local/bin/tailscale up --accept-routes --authkey="$auth_key" $hostnamearg
-  fi
-fi

@@ -67,6 +67,7 @@ install -D -m 755 "$scratch_dir/tailscale" /usr/local/bin/tailscale
 install -D -m 755 "$scratch_dir/tailscaled" /usr/local/sbin/tailscaled
 install -D -m 755 "$script_dir/tailscaled-entrypoint.sh" /usr/local/sbin/tailscaled-entrypoint
 install -D -m 755 "$script_dir/tailscaled-devcontainer-start.sh" /usr/local/sbin/tailscaled-devcontainer-start
+install -D -m 755 "$script_dir/tailscaled-auth-setup.sh" /usr/local/sbin/tailscaled-auth-setup
 
 mkdir -p /var/lib/tailscale /var/run/tailscale /var/log
 touch /var/log/tailscaled.log

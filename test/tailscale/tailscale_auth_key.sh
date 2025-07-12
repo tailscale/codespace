@@ -7,7 +7,15 @@ set -e
 
 source dev-container-features-test-lib
 
-# Wait for the auth key to be seen by the start script.
+# The auth logic now runs in postCreateCommand, not entrypoint
+# So we need to manually trigger it for testing
+if [[ -f /usr/local/sbin/tailscaled-auth-setup ]]; then
+    # Run the auth setup script directly since test framework
+    # doesn't execute postCreateCommand
+    TS_AUTH_KEY="test-auth-key" /usr/local/sbin/tailscaled-auth-setup || true
+fi
+
+# Wait for the auth key to be seen by the auth setup script.
 count=100
 while ((count--)); do
     [[ -f /tmp/test-auth-key-seen ]] && break
@@ -16,7 +24,7 @@ done
 
 check "/tmp/test-auth-key-seen" ls /tmp/test-auth-key-seen
 
-# It would be nice to directly test that the entrypoint is doing unset
-# TS_AUTH_KEY, however that isn't visible to the test execution.
+# Verify the auth setup script exists
+check "tailscaled-auth-setup exists" ls /usr/local/sbin/tailscaled-auth-setup
 
 reportResults
