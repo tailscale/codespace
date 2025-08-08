@@ -13,4 +13,6 @@ if [[ -n "$VERSION" ]]; then
     check "version is correct" bash -c "tailscale version --daemon | grep -q $VERSION"
 fi
 
+check "tailscale operator is not set" bash -c '! ( tailscale debug prefs | grep -q OperatorUser )'
+
 reportResults

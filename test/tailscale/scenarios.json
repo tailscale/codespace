@@ -27,5 +27,16 @@
         "features": {
             "tailscale": {}
         }
+    },
+    "tailscale_operator": {
+        "image": "ubuntu:latest",
+        "containerEnv": {
+            "TS_AUTH_KEY": "test-auth-key"
+        },
+        "features": {
+            "tailscale": {
+                "operator": "$USER"
+            }
+        }
     }
 }

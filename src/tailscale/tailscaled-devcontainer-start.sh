@@ -3,8 +3,21 @@
 # Use of this source code is governed by a BSD-style
 # license that can be found in the LICENSE file.
 
+# if an operator argument has been provided, set the operator to
+# the specified value; if the value is the special value "$USER"
+# then set the operator to the default user for the devcontainer.
+#
+# This is done before the sudo switchover so we have the actual
+# user persisted.
+if [[ -n "$OPERATOR" ]]; then
+  if [[ "$OPERATOR" == "\$USER" ]]; then
+    OPERATOR=$(id -un)
+  fi
+  export OPERATOR
+fi
+
 if [[ $(id -u) -ne 0 ]]; then
-  if ! command -v sudo > /dev/null; then
+  if ! command -v sudo >/dev/null; then
     >&2 echo "tailscaled could not start as root."
     exit 1
   fi
@@ -30,7 +43,6 @@ https://tailscale.com/kb/1112/userspace-networking
 EOF
   fi
 fi
-
 
 TAILSCALED_PID=""
 TAILSCALED_SOCK=/var/run/tailscale/tailscaled.sock
@@ -72,6 +84,12 @@ if [[ -n "$auth_key" ]]; then
     if [[ -n "${CODESPACE_NAME}" ]]; then
       hostnamearg="--hostname=${CODESPACE_NAME}"
     fi
-    /usr/local/bin/tailscale up --accept-routes --authkey="$auth_key" $hostnamearg
+
+    operatorarg=""
+    if [[ -n "${OPERATOR}" ]]; then
+      operatorarg="--operator=${OPERATOR}"
+    fi
+
+    /usr/local/bin/tailscale up --accept-routes --authkey="$auth_key" $hostnamearg $operatorarg
   fi
 fi
